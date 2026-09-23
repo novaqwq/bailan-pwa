@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bailan-v1'
+const CACHE_NAME = 'bailan-v2'
 const ASSETS = [
   './',
   './index.html',
