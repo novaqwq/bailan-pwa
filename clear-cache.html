@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清除缓存 - 摆烂导师</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: #764ba2;
+    }
+    .btn-secondary:hover {
+      background: #633d8a;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+    .instructions {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .instructions h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .instructions ol {
+      color: #666;
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    code {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗑️ 清除应用缓存</h1>
+    <p>如果设置面板一直自动打开，说明您的浏览器缓存了旧版本。</p>
+    <p>点击下方按钮清除所有缓存数据：</p>
+    
+    <button class="btn" id="clearBtn">清除所有缓存并重新加载</button>
+    <button class="btn btn-secondary" id="skipBtn">跳过，直接访问应用</button>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="instructions">
+      <h3>或者手动清除缓存：</h3>
+      <ol>
+        <li>按 <code>F12</code> 打开开发者工具</li>
+        <li>右键点击刷新按钮</li>
+        <li>选择"<strong>清空缓存并硬性重新加载</strong>"</li>
+        <li>或者在设置中清除浏览器的"缓存的图片和文件"</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    const statusDiv = document.getElementById('status')
+    
+    document.getElementById('clearBtn').addEventListener('click', async () => {
+      try {
+        // 1. 注销所有 Service Workers
+        const regs = await navigator.serviceWorker.getRegistrations()
+        for (const reg of regs) {
+          await reg.unregister()
+        }
+        console.log('Service Workers 已注销')
+        
+        // 2. 清除所有缓存
+        const cacheNames = await caches.keys()
+        await Promise.all(cacheNames.map(name => caches.delete(name)))
+        console.log('Cache Storage 已清除:', cacheNames)
+        
+        // 3. 清除 localStorage（可选，保留 API key）
+        // localStorage.clear()
+        
+        statusDiv.className = 'status success'
+        statusDiv.textContent = '✅ 缓存已清除！3秒后重新加载...'
+        
+        setTimeout(() => {
+          window.location.href = './index.html'
+        }, 3000)
+      } catch (err) {
+        console.error('清除缓存失败:', err)
+        statusDiv.className = 'status error'
+        statusDiv.textContent = '❌ 清除失败: ' + err.message
+      }
+    })
+    
+    document.getElementById('skipBtn').addEventListener('click', () => {
+      window.location.href = './index.html'
+    })
+  </script>
+</body>
+</html>
