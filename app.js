@@ -1115,6 +1115,8 @@
 
   // ===== Init =====
   function init() {
+    // 确保初始化时设置面板关闭
+    state.showSettings = false
     window.addEventListener('hashchange', handleHash)
     handleHash()
   }
