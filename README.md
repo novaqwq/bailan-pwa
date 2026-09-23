@@ -60,13 +60,21 @@ serve -l 3000 .
 
 ## AI 功能配置
 
-问答和证书生成功能需要 DeepSeek API Key：
+问答、证书生成和论文撰写功能需要 DeepSeek API Key：
 
-1. 点击右上角 "API 设置"
-2. 输入你的 DeepSeek API Key
-3. 点击 "保存"
+**如何设置：**
+1. 在首页右上角找到并点击 **"API 设置"** 按钮
+2. 在弹出的面板中输入你的 DeepSeek API Key
+3. 点击 **"保存"** 按钮
 
-API Key 仅保存在浏览器本地，不会上传到任何服务器。
+**获取 API Key：**
+- 访问 [DeepSeek 官网](https://platform.deepseek.com/) 注册并获取 API Key
+- 新用户通常有免费额度可用
+
+**隐私说明：**
+- API Key 仅保存在浏览器 localStorage 中
+- 不会上传到任何服务器
+- 清除浏览器数据会删除 API Key，需重新设置
 
 ## PWA 特性
 
