@@ -235,6 +235,8 @@
     const currentRankIndex = RANK_LIST.findIndex(r => r.name === stats.rank.name)
     const recent = records.slice(-5).reverse()
 
+    console.log('[renderIndex] state.showSettings:', state.showSettings)
+    
     const settingsHtml = state.showSettings ? `
       <div class="settings-panel">
         <input type="password" id="api-key-input" placeholder="输入 DeepSeek API Key" value="${esc(AI_CONFIG.API_KEY)}">
@@ -1115,10 +1117,19 @@
 
   // ===== Init =====
   function init() {
+    console.log('[Init] Starting initialization...')
+    console.log('[Init] AI_CONFIG.API_KEY:', AI_CONFIG.API_KEY ? '已设置' : '未设置')
+    console.log('[Init] state.showSettings before:', state.showSettings)
+    
     // 确保初始化时设置面板关闭
     state.showSettings = false
+    
+    console.log('[Init] state.showSettings after:', state.showSettings)
+    
     window.addEventListener('hashchange', handleHash)
     handleHash()
+    
+    console.log('[Init] Initialization complete')
   }
 
   if (document.readyState === 'loading') {
